@@ -926,3 +926,159 @@ function updateFreshnessAge() {
     el.textContent = label;
     el.className = "freshness-age " + cls;
 }
+
+/* ========== DIAGNOSTICS MODAL ========== */
+
+function initDiagnostics() {
+    const btn = document.getElementById("diag-btn");
+    const overlay = document.getElementById("diag-overlay");
+    const closeBtn = document.getElementById("diag-close");
+    const runBtn = document.getElementById("diag-run-btn");
+
+    if (btn) btn.addEventListener("click", openDiagnostics);
+    if (closeBtn) closeBtn.addEventListener("click", closeDiagnostics);
+    if (runBtn) runBtn.addEventListener("click", () => fetchDiagnostics());
+    if (overlay) overlay.addEventListener("click", (e) => {
+        if (e.target === overlay) closeDiagnostics();
+    });
+}
+
+function openDiagnostics() {
+    document.getElementById("diag-overlay").style.display = "flex";
+    fetchDiagnostics();
+}
+
+function closeDiagnostics() {
+    document.getElementById("diag-overlay").style.display = "none";
+}
+
+async function fetchDiagnostics() {
+    const body = document.getElementById("diag-modal-body");
+    const runBtn = document.getElementById("diag-run-btn");
+    body.innerHTML = '<div class="diag-loading">&#8987; Running health checks — this may take a few seconds...</div>';
+    runBtn.disabled = true;
+    runBtn.textContent = "Running...";
+
+    try {
+        const resp = await fetch("/api/diagnostics");
+        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+        const data = await resp.json();
+        renderDiagnostics(data);
+    } catch (err) {
+        body.innerHTML = `<div class="diag-section diag-error">
+            <div class="diag-section-title">Connection Error</div>
+            <p>Failed to fetch diagnostics: ${esc(err.message)}</p>
+            <p>Ensure the backend is running and reachable.</p>
+        </div>`;
+    } finally {
+        runBtn.disabled = false;
+        runBtn.innerHTML = "&#8635; Run Health Check";
+    }
+}
+
+function diagStatusIcon(status) {
+    if (status === "ok" || status === "online" || status === true) return '<span class="diag-dot diag-dot-ok"></span>';
+    if (status === "warning" || status === "degraded") return '<span class="diag-dot diag-dot-warn"></span>';
+    return '<span class="diag-dot diag-dot-err"></span>';
+}
+
+function renderDiagnostics(data) {
+    const body = document.getElementById("diag-modal-body");
+    let html = "";
+
+    // System Health
+    const sys = data.system || {};
+    html += `<div class="diag-section">
+        <div class="diag-section-title">${diagStatusIcon(sys.status)} System Health</div>
+        <div class="diag-grid">
+            <div class="diag-kv"><span class="diag-k">Uptime</span><span class="diag-v">${esc(sys.uptime_human || "N/A")}</span></div>
+            <div class="diag-kv"><span class="diag-k">RAM</span><span class="diag-v">${sys.ram_mb || 0} MB</span></div>
+            <div class="diag-kv"><span class="diag-k">CPU Load (1m)</span><span class="diag-v">${sys.cpu_load_1m || 0}</span></div>
+            <div class="diag-kv"><span class="diag-k">CPU Load (5m)</span><span class="diag-v">${sys.cpu_load_5m || 0}</span></div>
+            <div class="diag-kv"><span class="diag-k">Active Threads</span><span class="diag-v">${sys.active_threads || 0}</span></div>
+            <div class="diag-kv"><span class="diag-k">Gunicorn</span><span class="diag-v">${esc(sys.gunicorn_config || "N/A")}</span></div>
+            <div class="diag-kv"><span class="diag-k">Python</span><span class="diag-v">${esc(sys.python_version || "N/A")}</span></div>
+            <div class="diag-kv"><span class="diag-k">PID</span><span class="diag-v">${sys.pid || "N/A"}</span></div>
+        </div>
+    </div>`;
+
+    // Database Health
+    const db = data.database || {};
+    html += `<div class="diag-section">
+        <div class="diag-section-title">${diagStatusIcon(db.status)} Database Health</div>
+        <div class="diag-grid">
+            <div class="diag-kv"><span class="diag-k">File Size</span><span class="diag-v">${db.file_size_mb || 0} MB</span></div>
+            <div class="diag-kv"><span class="diag-k">WAL Size</span><span class="diag-v">${db.wal_size_mb || 0} MB</span></div>
+            <div class="diag-kv"><span class="diag-k">Path</span><span class="diag-v diag-path">${esc(db.file_path || "N/A")}</span></div>
+        </div>
+        <div class="diag-checks">`;
+    (db.checks || []).forEach(c => {
+        html += `<div class="diag-check ${c.status === "ok" ? "" : c.status === "warning" ? "diag-check-warn" : "diag-check-err"}">
+            <span class="diag-check-name">${diagStatusIcon(c.status)} ${esc(c.name)}</span>
+            <span class="diag-check-detail">${esc(c.detail || "")}</span>
+        </div>`;
+    });
+    html += `</div></div>`;
+
+    // Table counts
+    if (db.table_counts) {
+        html += `<div class="diag-section">
+            <div class="diag-section-title">&#128202; Table Row Counts</div>
+            <div class="diag-grid diag-grid-compact">`;
+        Object.entries(db.table_counts).forEach(([tbl, cnt]) => {
+            html += `<div class="diag-kv"><span class="diag-k">${esc(tbl)}</span><span class="diag-v">${cnt >= 0 ? cnt.toLocaleString() : "ERR"}</span></div>`;
+        });
+        html += `</div></div>`;
+    }
+
+    // External Connectivity
+    const conn = data.connectivity || {};
+    html += `<div class="diag-section">
+        <div class="diag-section-title">${diagStatusIcon(conn.status)} External Connectivity (${conn.online_count || 0}/${conn.total || 0} online)</div>
+        <div class="diag-checks">`;
+    (conn.targets || []).forEach(t => {
+        html += `<div class="diag-check ${t.online ? "" : "diag-check-err"}">
+            <span class="diag-check-name">${diagStatusIcon(t.online)} ${esc(t.name)}</span>
+            <span class="diag-check-detail">${esc(t.status || "")}</span>
+        </div>`;
+    });
+    html += `</div></div>`;
+
+    // Scheduler Status
+    const sched = data.scheduler || {};
+    html += `<div class="diag-section">
+        <div class="diag-section-title">${diagStatusIcon(sched.status)} Scheduler & Collectors</div>
+        <div class="diag-checks">`;
+    (sched.collectors || []).forEach(c => {
+        const statusCls = c.status === "ONLINE" ? "" : c.status === "DEGRADED" ? "diag-check-warn" : "diag-check-err";
+        html += `<div class="diag-check ${statusCls}">
+            <span class="diag-check-name">${diagStatusIcon(c.status === "ONLINE")} ${esc(c.name)}</span>
+            <span class="diag-check-detail">
+                ${esc(c.status)} | Every ${esc(c.interval_human)} | Last: ${c.age_seconds !== null ? c.age_seconds + "s ago" : "never"}
+                ${c.latency_ms ? ` | ${c.latency_ms}ms` : ""}
+                ${c.error ? ` | <span class="diag-err-text">${esc(c.error)}</span>` : ""}
+            </span>
+        </div>`;
+    });
+    html += `</div></div>`;
+
+    // Source Status
+    const sources = data.sources || {};
+    if (Object.keys(sources).length) {
+        html += `<div class="diag-section">
+            <div class="diag-section-title">&#128225; Feed Source Status</div>
+            <div class="diag-checks">`;
+        Object.entries(sources).forEach(([key, info]) => {
+            html += `<div class="diag-check ${info.online ? "" : "diag-check-err"}">
+                <span class="diag-check-name">${diagStatusIcon(info.online)} ${esc(key)}</span>
+                <span class="diag-check-detail">${esc(info.status || "UNKNOWN")} | ${info.count || 0} items</span>
+            </div>`;
+        });
+        html += `</div></div>`;
+    }
+
+    html += `<div class="diag-timestamp">Last checked: ${esc(data.timestamp || new Date().toISOString())}</div>`;
+    body.innerHTML = html;
+}
+
+document.addEventListener("DOMContentLoaded", initDiagnostics);

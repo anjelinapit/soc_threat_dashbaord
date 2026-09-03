@@ -9,14 +9,17 @@ APP="$SCRIPT_DIR/backend/app.py"
 start_server() {
     if [ -f "$PID_FILE" ] && kill -0 "$(cat "$PID_FILE")" 2>/dev/null; then
         echo "Server already running (PID $(cat "$PID_FILE"))"
+        echo "  Dashboard: http://localhost:5000"
         return 0
     fi
     echo "Starting SOC Threat Dashboard..."
     nohup env PYTHONUNBUFFERED=1 python3 "$APP" >> "$LOG_FILE" 2>&1 &
     echo $! > "$PID_FILE"
-    sleep 1
+    sleep 2
     if kill -0 "$(cat "$PID_FILE")" 2>/dev/null; then
-        echo "Server started (PID $(cat "$PID_FILE")), log: $LOG_FILE"
+        echo "Server started (PID $(cat "$PID_FILE"))"
+        echo "  Dashboard: http://localhost:5000"
+        echo "  Log:       $LOG_FILE"
     else
         echo "Failed to start. Check $LOG_FILE"
         rm -f "$PID_FILE"

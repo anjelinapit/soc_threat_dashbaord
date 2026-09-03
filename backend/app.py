@@ -1,5 +1,6 @@
 import os
 import sys
+import platform
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -11,6 +12,7 @@ import string
 import threading
 import logging
 import urllib.parse
+import resource
 from collections import Counter
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone
@@ -463,6 +465,8 @@ dashboard_cache = {
     "threat_actors": [], "geo_events": [],
 }
 cache_lock = threading.Lock()
+
+APP_START_TIME = time.time()
 
 
 BROWSER_UA = (
@@ -1983,6 +1987,247 @@ def health():
         "timestamp": datetime.now(timezone.utc).isoformat(),
         "news_in_db": db.get_total_news_count(),
     })
+
+
+@app.route("/api/diagnostics")
+def diagnostics():
+    diag = {}
+
+    # --- System Health ---
+    uptime_sec = round(time.time() - APP_START_TIME, 1)
+    usage = resource.getrusage(resource.RUSAGE_SELF)
+    ram_mb = round(usage.ru_maxrss / 1024, 1)
+    try:
+        load_1, load_5, load_15 = os.getloadavg()
+    except (OSError, AttributeError):
+        load_1 = load_5 = load_15 = 0.0
+
+    active_threads = threading.active_count()
+    gunicorn_workers = os.environ.get("WEB_CONCURRENCY", "1")
+
+    diag["system"] = {
+        "status": "ok",
+        "python_version": platform.python_version(),
+        "platform": platform.platform(),
+        "hostname": platform.node(),
+        "pid": os.getpid(),
+        "uptime_seconds": uptime_sec,
+        "uptime_human": _format_uptime(uptime_sec),
+        "ram_mb": ram_mb,
+        "cpu_load_1m": round(load_1, 2),
+        "cpu_load_5m": round(load_5, 2),
+        "cpu_load_15m": round(load_15, 2),
+        "active_threads": active_threads,
+        "gunicorn_workers": gunicorn_workers,
+        "gunicorn_config": f"{gunicorn_workers} workers, {os.environ.get('THREADS', '4')} threads",
+    }
+
+    # --- Database Health ---
+    db_info = _check_database_health()
+    diag["database"] = db_info
+
+    # --- External Connectivity ---
+    connectivity = _check_external_connectivity()
+    diag["connectivity"] = connectivity
+
+    # --- Scheduler / Collector Status ---
+    diag["scheduler"] = _get_scheduler_status()
+
+    # --- Feed Source Status ---
+    diag["sources"] = {}
+    for key, info in source_status.items():
+        diag["sources"][key] = {
+            "online": info.get("online", False),
+            "status": info.get("status", "UNKNOWN"),
+            "count": info.get("count", 0),
+        }
+
+    diag["timestamp"] = datetime.now(timezone.utc).isoformat()
+    return jsonify(diag)
+
+
+def _format_uptime(seconds):
+    days = int(seconds // 86400)
+    hours = int((seconds % 86400) // 3600)
+    mins = int((seconds % 3600) // 60)
+    secs = int(seconds % 60)
+    parts = []
+    if days:
+        parts.append(f"{days}d")
+    if hours:
+        parts.append(f"{hours}h")
+    if mins:
+        parts.append(f"{mins}m")
+    parts.append(f"{secs}s")
+    return " ".join(parts)
+
+
+def _check_database_health():
+    info = {"status": "ok", "checks": []}
+    try:
+        conn = db.get_conn()
+        # Connectivity test
+        start = time.time()
+        row = conn.execute("SELECT 1 AS test").fetchone()
+        latency_ms = round((time.time() - start) * 1000, 2)
+        info["checks"].append({
+            "name": "Connectivity",
+            "status": "ok" if row else "error",
+            "detail": f"Connected (latency: {latency_ms}ms)",
+            "latency_ms": latency_ms,
+        })
+
+        # WAL mode check
+        mode_row = conn.execute("PRAGMA journal_mode").fetchone()
+        journal_mode = mode_row[0] if mode_row else "unknown"
+        info["checks"].append({
+            "name": "Journal Mode",
+            "status": "ok" if journal_mode == "wal" else "warning",
+            "detail": f"Mode: {journal_mode.upper()}",
+        })
+
+        # DB file size
+        db_size = os.path.getsize(db.DB_PATH) if os.path.exists(db.DB_PATH) else 0
+        db_size_mb = round(db_size / (1024 * 1024), 2)
+        info["file_size_mb"] = db_size_mb
+        info["file_path"] = db.DB_PATH
+        info["checks"].append({
+            "name": "File Size",
+            "status": "ok",
+            "detail": f"{db_size_mb} MB",
+        })
+
+        # WAL file sizes
+        shm_path = db.DB_PATH + "-shm"
+        wal_path = db.DB_PATH + "-wal"
+        shm_size = os.path.getsize(shm_path) if os.path.exists(shm_path) else 0
+        wal_size = os.path.getsize(wal_path) if os.path.exists(wal_path) else 0
+        info["wal_size_mb"] = round(wal_size / (1024 * 1024), 2)
+        info["shm_size_kb"] = round(shm_size / 1024, 1)
+
+        # Table counts
+        tables = [
+            "news", "news_vectors", "word_cloud_snapshots",
+            "attack_vector_snapshots", "phishing_domains",
+            "kev_vulnerabilities", "ioc_observations",
+            "ransomware_victims", "threatfox_iocs",
+        ]
+        table_counts = {}
+        for tbl in tables:
+            try:
+                cnt = conn.execute(f"SELECT COUNT(*) AS c FROM {tbl}").fetchone()["c"]
+                table_counts[tbl] = cnt
+            except Exception:
+                table_counts[tbl] = -1
+        info["table_counts"] = table_counts
+
+        # Lock/timeout test
+        start = time.time()
+        conn.execute("BEGIN IMMEDIATE")
+        lock_time_ms = round((time.time() - start) * 1000, 2)
+        conn.execute("ROLLBACK")
+        info["checks"].append({
+            "name": "Lock Acquisition",
+            "status": "ok" if lock_time_ms < 1000 else "warning",
+            "detail": f"{lock_time_ms}ms" + (" (slow — possible contention)" if lock_time_ms > 500 else ""),
+            "latency_ms": lock_time_ms,
+        })
+
+        # Permissions
+        readable = os.access(db.DB_PATH, os.R_OK)
+        writable = os.access(db.DB_PATH, os.W_OK)
+        info["checks"].append({
+            "name": "Permissions",
+            "status": "ok" if (readable and writable) else "error",
+            "detail": f"Read: {'Yes' if readable else 'No'} | Write: {'Yes' if writable else 'No'}",
+        })
+
+    except Exception as e:
+        info["status"] = "error"
+        info["checks"].append({
+            "name": "Connectivity",
+            "status": "error",
+            "detail": f"Connection failed: {str(e)[:80]}",
+        })
+
+    if any(c["status"] == "error" for c in info["checks"]):
+        info["status"] = "error"
+    elif any(c["status"] == "warning" for c in info["checks"]):
+        info["status"] = "warning"
+
+    return info
+
+
+def _check_external_connectivity():
+    """Test outbound connectivity to key services."""
+    targets = [
+        ("Render Backend", "https://soc-threat-dashboard.onrender.com/api/health", "GET"),
+        ("CISA KEV", CISA_KEV_URL, "GET"),
+        ("PhishStats", PHISHSTATS_URL, "GET"),
+        ("AlienVault OTX", f"{OTX_URL}?limit=1", "GET"),
+        ("Ransomware.live", RANSOMWARE_LIVE_URL, "GET"),
+        ("URLhaus (abuse.ch)", URLHAUS_URL, "GET"),
+        ("CDN: Chart.js", "https://cdn.jsdelivr.net/npm/chart.js@4.4.6/dist/chart.umd.min.js", "GET"),
+        ("CDN: D3.js", "https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js", "GET"),
+        ("Google Fonts", "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap", "GET"),
+        ("EPSS API", EPSS_API_URL, "GET"),
+        ("CVE CIRCL", f"{CVE_CIRCL_URL}/CVE-2024-0001", "GET"),
+    ]
+
+    results = []
+    for name, url, method in targets:
+        ok, msg = _test_endpoint(name, url, method=method, timeout=5)
+        results.append({
+            "name": name,
+            "url": url,
+            "online": ok,
+            "status": msg,
+        })
+
+    online_count = sum(1 for r in results if r["online"])
+    return {
+        "status": "ok" if online_count == len(results) else ("degraded" if online_count > 0 else "offline"),
+        "online_count": online_count,
+        "total": len(results),
+        "targets": results,
+    }
+
+
+def _get_scheduler_status():
+    """Return status of the background scheduler and collector state."""
+    now = time.time()
+    collectors = []
+    for name, state in collector_state.items():
+        interval = COLLECTOR_INTERVALS[name]
+        last_run = state.get("last_run", 0)
+        next_run = last_run + interval if last_run else 0
+        age = round(now - last_run, 1) if last_run else None
+        next_in = round(next_run - now, 1) if next_run > now else 0
+        collectors.append({
+            "name": name,
+            "interval_seconds": interval,
+            "interval_human": _format_uptime(interval),
+            "last_run": state.get("last_success"),
+            "age_seconds": age,
+            "next_run_in_seconds": max(0, next_in),
+            "status": state.get("status", "PENDING"),
+            "error": state.get("error", ""),
+            "count": state.get("count", 0),
+            "latency_ms": state.get("latency_ms"),
+        })
+
+    return {
+        "status": "ok",
+        "thread_alive": any(
+            t.name == "background_scheduler" or "scheduler" in getattr(t, "name", "").lower()
+            for t in threading.enumerate()
+        ),
+        "active_threads": [
+            {"name": t.name, "daemon": t.daemon, "alive": t.is_alive()}
+            for t in threading.enumerate()
+        ],
+        "collectors": collectors,
+    }
 
 
 def background_scheduler():

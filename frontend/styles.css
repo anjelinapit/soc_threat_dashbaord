@@ -1726,3 +1726,327 @@ html, body {
     #dashboard-grid { height: calc(100vh - 215px); }
 }
 
+/* ========== DIAGNOSTICS BUTTON ========== */
+
+.diag-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    background: rgba(102, 199, 255, 0.12);
+    border: 1px solid var(--accent-border);
+    border-radius: 999px;
+    font-family: var(--mono);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: var(--accent);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+}
+
+.diag-btn:hover {
+    background: rgba(102, 199, 255, 0.25);
+    box-shadow: 0 0 12px rgba(102, 199, 255, 0.2);
+}
+
+/* ========== CDN FALLBACK BANNER ========== */
+
+.cdn-fallback-banner {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: rgba(245, 158, 11, 0.12);
+    border-bottom: 1px solid var(--warning-border);
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--warning);
+    z-index: 98;
+}
+
+.cdn-fallback-icon {
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+.cdn-fallback-text {
+    flex: 1;
+    line-height: 1.5;
+}
+
+.cdn-fallback-text code {
+    background: rgba(245, 158, 11, 0.15);
+    padding: 1px 4px;
+    border-radius: 3px;
+    font-family: var(--mono);
+    font-size: 9px;
+}
+
+.cdn-fallback-close {
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--warning);
+    flex-shrink: 0;
+    transition: color 0.12s;
+}
+
+.cdn-fallback-close:hover { color: var(--critical); }
+
+/* ========== DIAGNOSTICS MODAL ========== */
+
+.diag-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    backdrop-filter: blur(4px);
+}
+
+.diag-modal {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    width: 720px;
+    max-width: 95vw;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.50);
+}
+
+.diag-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    background: var(--panel-header);
+    border-bottom: 1px solid var(--border);
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--text-secondary);
+    border-radius: 10px 10px 0 0;
+}
+
+.diag-close {
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-dim);
+    transition: color 0.12s;
+}
+
+.diag-close:hover { color: var(--critical); }
+
+.diag-modal-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+}
+
+.diag-modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    padding: 10px 16px;
+    border-top: 1px solid var(--border);
+    border-radius: 0 0 10px 10px;
+}
+
+.diag-run-btn {
+    padding: 6px 16px;
+    background: var(--accent);
+    border: none;
+    border-radius: 6px;
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 700;
+    color: #0a0e18;
+    cursor: pointer;
+    transition: opacity 0.12s;
+}
+
+.diag-run-btn:hover { opacity: 0.85; }
+.diag-run-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* Diagnostics Sections */
+
+.diag-section {
+    margin-bottom: 16px;
+    background: rgba(16, 23, 38, 0.6);
+    border: 1px solid var(--border-faint);
+    border-radius: 8px;
+    padding: 12px;
+}
+
+.diag-section:last-child { margin-bottom: 0; }
+
+.diag-section-title {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border-faint);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.diag-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 6px;
+}
+
+.diag-grid-compact {
+    grid-template-columns: 1fr 1fr;
+}
+
+.diag-kv {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 4px 8px;
+    background: rgba(7, 11, 20, 0.5);
+    border-radius: 4px;
+    border: 1px solid var(--border-faint);
+}
+
+.diag-k {
+    font-family: var(--mono);
+    font-size: 8px;
+    font-weight: 600;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.diag-v {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.diag-path {
+    font-size: 9px;
+    word-break: break-all;
+    color: var(--text-muted);
+}
+
+.diag-checks {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.diag-check {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 5px 8px;
+    border-radius: 4px;
+    border: 1px solid var(--border-faint);
+    background: rgba(7, 11, 20, 0.4);
+}
+
+.diag-check-warn {
+    border-color: var(--warning-border);
+    background: var(--warning-bg);
+}
+
+.diag-check-err {
+    border-color: var(--critical-border);
+    background: var(--critical-bg);
+}
+
+.diag-check-name {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-primary);
+    white-space: nowrap;
+    min-width: 120px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.diag-check-detail {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--text-muted);
+    line-height: 1.4;
+}
+
+.diag-err-text {
+    color: var(--critical);
+    font-weight: 600;
+}
+
+/* Status Dots */
+
+.diag-dot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.diag-dot-ok {
+    background: var(--healthy);
+    box-shadow: 0 0 6px var(--healthy);
+}
+
+.diag-dot-warn {
+    background: var(--warning);
+    box-shadow: 0 0 6px var(--warning);
+}
+
+.diag-dot-err {
+    background: var(--critical);
+    box-shadow: 0 0 6px var(--critical);
+}
+
+/* Loading & Footer */
+
+.diag-loading {
+    text-align: center;
+    padding: 40px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+.diag-timestamp {
+    margin-top: 12px;
+    padding-top: 8px;
+    border-top: 1px solid var(--border-faint);
+    font-family: var(--mono);
+    font-size: 8px;
+    color: var(--text-dim);
+    text-align: right;
+}
+
+.diag-error {
+    color: var(--critical);
+    text-align: center;
+    padding: 24px;
+}
+
+.diag-error p {
+    margin: 6px 0;
+    font-size: 11px;
+}
+

@@ -9572,3 +9572,228 @@ NameError: name 'URLHAUS_URL' is not defined
 2026-09-02 17:25:37,132 [INFO] 127.0.0.1 - - [02/Sep/2026 17:25:37] "[36mGET /styles.css HTTP/1.1[0m" 304 -
 2026-09-02 17:25:37,135 [INFO] 127.0.0.1 - - [02/Sep/2026 17:25:37] "[36mGET /dashboard.js HTTP/1.1[0m" 304 -
 2026-09-02 17:25:37,483 [INFO] 127.0.0.1 - - [02/Sep/2026 17:25:37] "GET /api/dashboard-data HTTP/1.1" 200 -
+2026-09-03 08:54:26,836 [INFO] Starting SOC Threat Dashboard backend...
+2026-09-03 08:54:27,080 [INFO] Database initialized: /mnt/c/users/admin/documents/git-test/soc_threat_dashbaord/backend/cache/dashboard.db
+2026-09-03 08:54:27,169 [INFO] Loaded from DB: News=30 Words=0 Vectors=16 Phish=15 OTX=15 KEV=50
+2026-09-03 08:54:27,170 [INFO] ============================================================
+2026-09-03 08:54:27,172 [INFO]   SOC THREAT DASHBOARD - STARTUP VERIFICATION
+2026-09-03 08:54:27,181 [INFO] ============================================================
+ * Serving Flask app 'app'
+ * Debug mode: off
+2026-09-03 08:54:27,225 [INFO] [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.21.60.254:5000
+2026-09-03 08:54:27,227 [INFO] [33mPress CTRL+C to quit[0m
+2026-09-03 08:54:27,876 [INFO]   [✓] CISA KEV: ONLINE (200 OK, 0.69s)
+2026-09-03 08:54:28,459 [INFO]   [✓] PhishStats: ONLINE (200 OK, 0.58s)
+2026-09-03 08:54:31,685 [INFO]   [✗] AlienVault OTX: TIMEOUT
+2026-09-03 08:54:32,575 [INFO]   [✓] Ransomware.live: ONLINE (200 OK, 0.89s)
+2026-09-03 08:54:33,163 [INFO]   [✗] URLhaus (abuse.ch): HTTP_401
+2026-09-03 08:54:34,301 [INFO]   [✓] RSS: The Hacker News: ONLINE (200 OK, 1.14s)
+2026-09-03 08:54:35,334 [INFO]   [✓] RSS: BleepingComputer: ONLINE (200 OK, 1.03s)
+2026-09-03 08:54:35,717 [INFO] 127.0.0.1 - - [03/Sep/2026 08:54:35] "GET / HTTP/1.1" 200 -
+2026-09-03 08:54:36,272 [INFO]   [✓] RSS: Dark Reading: ONLINE (200 OK, 0.94s)
+2026-09-03 08:54:37,258 [INFO]   [✓] RSS: SecurityWeek: ONLINE (200 OK, 0.99s)
+2026-09-03 08:54:37,465 [INFO]   [✓] RSS: CISA Advisories: ONLINE (200 OK, 0.2s)
+2026-09-03 08:54:39,205 [INFO]   [✓] RSS: SANS ISC: ONLINE (200 OK, 1.74s)
+2026-09-03 08:54:39,358 [INFO]   [✓] RSS: CISA ICS: ONLINE (200 OK, 0.15s)
+2026-09-03 08:54:40,020 [INFO]   [✓] RSS: SecurityWeek ICS/OT: ONLINE (200 OK, 0.66s)
+2026-09-03 08:54:40,021 [INFO] ============================================================
+2026-09-03 09:01:29,925 [INFO] Starting SOC Threat Dashboard backend...
+2026-09-03 09:01:30,183 [INFO] Database initialized: /mnt/c/users/admin/documents/git-test/soc_threat_dashbaord/backend/cache/dashboard.db
+2026-09-03 09:01:30,253 [INFO] Loaded from DB: News=30 Words=0 Vectors=16 Phish=15 OTX=15 KEV=50
+2026-09-03 09:01:30,255 [INFO] ============================================================
+2026-09-03 09:01:30,255 [INFO]   SOC THREAT DASHBOARD - STARTUP VERIFICATION
+2026-09-03 09:01:30,256 [INFO] ============================================================
+ * Serving Flask app 'app'
+ * Debug mode: off
+2026-09-03 09:01:30,300 [INFO] [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.21.60.254:5000
+2026-09-03 09:01:30,301 [INFO] [33mPress CTRL+C to quit[0m
+2026-09-03 09:01:30,864 [INFO]   [✓] CISA KEV: ONLINE (200 OK, 0.6s)
+2026-09-03 09:01:31,924 [INFO]   [✓] PhishStats: ONLINE (200 OK, 1.06s)
+2026-09-03 09:01:34,647 [INFO]   [✓] AlienVault OTX: ONLINE (200 OK, 2.72s)
+2026-09-03 09:01:35,514 [INFO]   [✓] Ransomware.live: ONLINE (200 OK, 0.87s)
+2026-09-03 09:01:36,183 [INFO]   [✗] URLhaus (abuse.ch): HTTP_401
+2026-09-03 09:01:37,634 [INFO]   [✓] RSS: The Hacker News: ONLINE (200 OK, 1.45s)
+2026-09-03 09:01:39,017 [INFO] 127.0.0.1 - - [03/Sep/2026 09:01:39] "GET / HTTP/1.1" 200 -
+2026-09-03 09:01:39,047 [INFO] 127.0.0.1 - - [03/Sep/2026 09:01:39] "GET /styles.css HTTP/1.1" 200 -
+2026-09-03 09:01:39,160 [INFO]   [✓] RSS: BleepingComputer: ONLINE (200 OK, 1.52s)
+2026-09-03 09:01:39,270 [INFO] 127.0.0.1 - - [03/Sep/2026 09:01:39] "GET /dashboard.js HTTP/1.1" 200 -
+2026-09-03 09:01:39,991 [INFO] 127.0.0.1 - - [03/Sep/2026 09:01:39] "GET /api/dashboard-data HTTP/1.1" 200 -
+2026-09-03 09:01:40,134 [INFO] 127.0.0.1 - - [03/Sep/2026 09:01:40] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2026-09-03 09:01:40,379 [INFO]   [✓] RSS: Dark Reading: ONLINE (200 OK, 1.22s)
+2026-09-03 09:01:41,320 [INFO]   [✓] RSS: SecurityWeek: ONLINE (200 OK, 0.94s)
+2026-09-03 09:01:41,544 [INFO]   [✓] RSS: CISA Advisories: ONLINE (200 OK, 0.22s)
+2026-09-03 09:01:43,343 [INFO]   [✓] RSS: SANS ISC: ONLINE (200 OK, 1.79s)
+2026-09-03 09:01:43,474 [INFO]   [✓] RSS: CISA ICS: ONLINE (200 OK, 0.13s)
+2026-09-03 09:01:44,091 [INFO]   [✓] RSS: SecurityWeek ICS/OT: ONLINE (200 OK, 0.62s)
+2026-09-03 09:01:44,093 [INFO] ============================================================
+2026-09-03 09:01:54,680 [INFO] 127.0.0.1 - - [03/Sep/2026 09:01:54] "GET /api/dashboard-data HTTP/1.1" 200 -
+2026-09-03 09:01:55,807 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:02:10,572 [INFO] 127.0.0.1 - - [03/Sep/2026 09:02:10] "GET /api/dashboard-data HTTP/1.1" 200 -
+2026-09-03 09:02:11,590 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:02:25,251 [INFO] 127.0.0.1 - - [03/Sep/2026 09:02:25] "GET /api/dashboard-data HTTP/1.1" 200 -
+2026-09-03 09:02:26,769 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:02:40,578 [INFO] 127.0.0.1 - - [03/Sep/2026 09:02:40] "GET /api/dashboard-data HTTP/1.1" 200 -
+2026-09-03 09:02:42,992 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:02:55,569 [INFO] 127.0.0.1 - - [03/Sep/2026 09:02:55] "GET /api/dashboard-data HTTP/1.1" 200 -
+2026-09-03 09:02:58,150 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:03:10,246 [INFO] 127.0.0.1 - - [03/Sep/2026 09:03:10] "GET /api/dashboard-data HTTP/1.1" 200 -
+2026-09-03 09:03:13,295 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:03:28,386 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:03:43,537 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:03:58,667 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:04:13,810 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:04:21,572 [INFO] 127.0.0.1 - - [03/Sep/2026 09:04:21] "GET /api/dashboard-data HTTP/1.1" 200 -
+2026-09-03 09:04:28,968 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:04:44,149 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:04:59,385 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:05:14,541 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:05:21,244 [INFO] 127.0.0.1 - - [03/Sep/2026 09:05:21] "GET /api/dashboard-data HTTP/1.1" 200 -
+2026-09-03 09:05:29,797 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:05:45,080 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:06:00,328 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:06:15,506 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:06:21,567 [INFO] 127.0.0.1 - - [03/Sep/2026 09:06:21] "GET /api/dashboard-data HTTP/1.1" 200 -
+2026-09-03 09:06:30,777 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:06:46,071 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:07:01,262 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:07:16,428 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:07:21,249 [INFO] 127.0.0.1 - - [03/Sep/2026 09:07:21] "GET /api/dashboard-data HTTP/1.1" 200 -
+2026-09-03 09:07:31,648 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:07:46,836 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:08:02,064 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:08:17,221 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:08:21,575 [INFO] 127.0.0.1 - - [03/Sep/2026 09:08:21] "GET /api/dashboard-data HTTP/1.1" 200 -
+2026-09-03 09:08:32,379 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:08:47,633 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:09:02,804 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:09:17,991 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:09:21,254 [INFO] 127.0.0.1 - - [03/Sep/2026 09:09:21] "GET /api/dashboard-data HTTP/1.1" 200 -
+2026-09-03 09:09:33,205 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:09:48,381 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:10:03,529 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:10:18,688 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:10:21,567 [INFO] 127.0.0.1 - - [03/Sep/2026 09:10:21] "GET /api/dashboard-data HTTP/1.1" 200 -
+2026-09-03 09:10:33,947 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:10:49,107 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:11:04,279 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:11:19,432 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:11:21,570 [INFO] 127.0.0.1 - - [03/Sep/2026 09:11:21] "GET /api/dashboard-data HTTP/1.1" 200 -
+2026-09-03 09:11:34,584 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:12:02,415 [INFO] 127.0.0.1 - - [03/Sep/2026 09:12:02] "GET /api/dashboard-data HTTP/1.1" 200 -
+2026-09-03 09:12:06,832 [INFO] 127.0.0.1 - - [03/Sep/2026 09:12:06] "[36mGET / HTTP/1.1[0m" 304 -
+2026-09-03 09:12:06,855 [INFO] 127.0.0.1 - - [03/Sep/2026 09:12:06] "[36mGET /styles.css HTTP/1.1[0m" 304 -
+2026-09-03 09:12:07,092 [INFO] 127.0.0.1 - - [03/Sep/2026 09:12:07] "[36mGET /dashboard.js HTTP/1.1[0m" 304 -
+2026-09-03 09:12:07,423 [INFO] 127.0.0.1 - - [03/Sep/2026 09:12:07] "GET /api/dashboard-data HTTP/1.1" 200 -
+2026-09-03 09:12:10,079 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:12:22,120 [INFO] 127.0.0.1 - - [03/Sep/2026 09:12:22] "GET /api/dashboard-data HTTP/1.1" 200 -
+2026-09-03 09:12:25,242 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:12:37,428 [INFO] 127.0.0.1 - - [03/Sep/2026 09:12:37] "GET /api/dashboard-data HTTP/1.1" 200 -
+2026-09-03 09:12:40,395 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:12:52,118 [INFO] 127.0.0.1 - - [03/Sep/2026 09:12:52] "GET /api/dashboard-data HTTP/1.1" 200 -
+2026-09-03 09:12:55,569 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:13:07,426 [INFO] 127.0.0.1 - - [03/Sep/2026 09:13:07] "GET /api/dashboard-data HTTP/1.1" 200 -
+2026-09-03 09:13:10,804 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:13:22,127 [INFO] 127.0.0.1 - - [03/Sep/2026 09:13:22] "GET /api/dashboard-data HTTP/1.1" 200 -
+2026-09-03 09:13:25,964 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:13:37,574 [INFO] 127.0.0.1 - - [03/Sep/2026 09:13:37] "GET /api/dashboard-data HTTP/1.1" 200 -
+2026-09-03 09:13:41,139 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:13:52,245 [INFO] 127.0.0.1 - - [03/Sep/2026 09:13:52] "GET /api/dashboard-data HTTP/1.1" 200 -
+2026-09-03 09:13:56,306 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:14:07,568 [INFO] 127.0.0.1 - - [03/Sep/2026 09:14:07] "GET /api/dashboard-data HTTP/1.1" 200 -
+2026-09-03 09:14:11,527 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:14:22,255 [INFO] 127.0.0.1 - - [03/Sep/2026 09:14:22] "GET /api/dashboard-data HTTP/1.1" 200 -
+2026-09-03 09:14:26,683 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:14:41,839 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:14:57,011 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:15:12,167 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:15:21,575 [INFO] 127.0.0.1 - - [03/Sep/2026 09:15:21] "GET /api/dashboard-data HTTP/1.1" 200 -
+2026-09-03 09:15:27,424 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:15:42,582 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:15:57,737 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:16:12,995 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:16:21,255 [INFO] 127.0.0.1 - - [03/Sep/2026 09:16:21] "GET /api/dashboard-data HTTP/1.1" 200 -
+2026-09-03 09:16:28,151 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:16:43,308 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:17:02,932 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:17:18,104 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:17:21,558 [INFO] 127.0.0.1 - - [03/Sep/2026 09:17:21] "GET /api/dashboard-data HTTP/1.1" 200 -
+2026-09-03 09:17:33,273 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:17:48,433 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:18:03,672 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:18:18,845 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:18:21,249 [INFO] 127.0.0.1 - - [03/Sep/2026 09:18:21] "GET /api/dashboard-data HTTP/1.1" 200 -
+2026-09-03 09:18:26,858 [INFO] 127.0.0.1 - - [03/Sep/2026 09:18:26] "GET /api/dashboard-data HTTP/1.1" 200 -
+2026-09-03 09:18:33,984 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:18:37,256 [INFO] 127.0.0.1 - - [03/Sep/2026 09:18:37] "GET /api/dashboard-data HTTP/1.1" 200 -
+2026-09-03 09:18:49,152 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:18:52,571 [INFO] 127.0.0.1 - - [03/Sep/2026 09:18:52] "GET /api/dashboard-data HTTP/1.1" 200 -
+2026-09-03 09:19:04,304 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:19:07,252 [INFO] 127.0.0.1 - - [03/Sep/2026 09:19:07] "GET /api/dashboard-data HTTP/1.1" 200 -
+2026-09-03 09:19:19,443 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:19:22,557 [INFO] 127.0.0.1 - - [03/Sep/2026 09:19:22] "GET /api/dashboard-data HTTP/1.1" 200 -
+2026-09-03 09:19:34,614 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:19:49,775 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:20:04,944 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:20:20,099 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:20:21,258 [INFO] 127.0.0.1 - - [03/Sep/2026 09:20:21] "GET /api/dashboard-data HTTP/1.1" 200 -
+2026-09-03 09:20:35,343 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:20:50,515 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:21:05,764 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:21:21,022 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:21:21,563 [INFO] 127.0.0.1 - - [03/Sep/2026 09:21:21] "GET /api/dashboard-data HTTP/1.1" 200 -
+2026-09-03 09:21:36,166 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:21:51,323 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:22:21,256 [INFO] 127.0.0.1 - - [03/Sep/2026 09:22:21] "GET /api/dashboard-data HTTP/1.1" 200 -
+2026-09-03 09:23:21,563 [INFO] 127.0.0.1 - - [03/Sep/2026 09:23:21] "GET /api/dashboard-data HTTP/1.1" 200 -
+2026-09-03 09:23:31,954 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:23:47,115 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:24:02,278 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:24:17,438 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:24:21,244 [INFO] 127.0.0.1 - - [03/Sep/2026 09:24:21] "GET /api/dashboard-data HTTP/1.1" 200 -
+2026-09-03 09:24:32,579 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:24:47,743 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:24:55,739 [INFO] 127.0.0.1 - - [03/Sep/2026 09:24:55] "GET /api/dashboard-data HTTP/1.1" 200 -
+2026-09-03 09:25:02,911 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:25:07,249 [INFO] 127.0.0.1 - - [03/Sep/2026 09:25:07] "GET /api/dashboard-data HTTP/1.1" 200 -
+2026-09-03 09:25:18,079 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:25:22,559 [INFO] 127.0.0.1 - - [03/Sep/2026 09:25:22] "GET /api/dashboard-data HTTP/1.1" 200 -
+2026-09-03 09:25:33,244 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:25:37,249 [INFO] 127.0.0.1 - - [03/Sep/2026 09:25:37] "GET /api/dashboard-data HTTP/1.1" 200 -
+2026-09-03 09:25:48,405 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:25:52,558 [INFO] 127.0.0.1 - - [03/Sep/2026 09:25:52] "GET /api/dashboard-data HTTP/1.1" 200 -
+2026-09-03 09:26:03,558 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:26:18,747 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:26:21,247 [INFO] 127.0.0.1 - - [03/Sep/2026 09:26:21] "GET /api/dashboard-data HTTP/1.1" 200 -
+2026-09-03 09:26:33,867 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:26:49,011 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:27:04,241 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:27:21,567 [INFO] 127.0.0.1 - - [03/Sep/2026 09:27:21] "GET /api/dashboard-data HTTP/1.1" 200 -
+2026-09-03 09:28:21,255 [INFO] 127.0.0.1 - - [03/Sep/2026 09:28:21] "GET /api/dashboard-data HTTP/1.1" 200 -
+2026-09-03 09:29:21,572 [INFO] 127.0.0.1 - - [03/Sep/2026 09:29:21] "GET /api/dashboard-data HTTP/1.1" 200 -
+2026-09-03 09:30:21,261 [INFO] 127.0.0.1 - - [03/Sep/2026 09:30:21] "GET /api/dashboard-data HTTP/1.1" 200 -
+2026-09-03 09:30:27,459 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:30:42,606 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:30:57,752 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:31:12,906 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:31:21,552 [INFO] 127.0.0.1 - - [03/Sep/2026 09:31:21] "GET /api/dashboard-data HTTP/1.1" 200 -
+2026-09-03 09:31:28,107 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:31:47,304 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:32:06,252 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:32:21,249 [INFO] 127.0.0.1 - - [03/Sep/2026 09:32:21] "GET /api/dashboard-data HTTP/1.1" 200 -
+2026-09-03 09:33:21,559 [INFO] 127.0.0.1 - - [03/Sep/2026 09:33:21] "GET /api/dashboard-data HTTP/1.1" 200 -
+2026-09-03 09:34:21,574 [INFO] 127.0.0.1 - - [03/Sep/2026 09:34:21] "GET /api/dashboard-data HTTP/1.1" 200 -
+2026-09-03 09:35:21,256 [INFO] 127.0.0.1 - - [03/Sep/2026 09:35:21] "GET /api/dashboard-data HTTP/1.1" 200 -
+2026-09-03 09:35:32,476 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:35:48,574 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:36:03,806 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:36:19,001 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:36:21,549 [INFO] 127.0.0.1 - - [03/Sep/2026 09:36:21] "GET /api/dashboard-data HTTP/1.1" 200 -
+2026-09-03 09:36:34,203 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:36:49,436 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0
+2026-09-03 09:37:04,611 [INFO] Refresh: KEV=50 PhishDomains=15 OTX=15 News=30 Words=25 Regional=0

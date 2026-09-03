@@ -38,6 +38,7 @@
         <div class="status-badge db-badge" id="db-stats" onclick="window.location.href='/articles.html'" style="cursor:pointer">
             DB: 0 articles
         </div>
+        <button class="diag-btn" id="diag-btn" title="System Diagnostics">&#9881; DIAG</button>
     </div>
 </header>
 
@@ -244,6 +245,53 @@
     </div>
 </main>
 
+<!-- CDN FALLBACK WARNING -->
+<div class="cdn-fallback-banner" id="cdn-fallback-banner" style="display:none">
+    <span class="cdn-fallback-icon">&#9888;</span>
+    <span class="cdn-fallback-text" id="cdn-fallback-text">
+        CDN assets (Chart.js / D3.js) failed to load. Charts and visualizations may not render.
+        This typically indicates corporate firewall or proxy blocking <code>cdn.jsdelivr.net</code>.
+        Contact your network team to whitelist this domain.
+    </span>
+    <span class="cdn-fallback-close" onclick="this.parentElement.style.display='none'">&times;</span>
+</div>
+
+<!-- DIAGNOSTICS MODAL -->
+<div class="diag-overlay" id="diag-overlay" style="display:none">
+    <div class="diag-modal">
+        <div class="diag-modal-header">
+            <span>&#9881; SYSTEM DIAGNOSTICS</span>
+            <span class="diag-close" id="diag-close">&times;</span>
+        </div>
+        <div class="diag-modal-body" id="diag-modal-body">
+            <div class="diag-loading">Running health checks...</div>
+        </div>
+        <div class="diag-modal-footer">
+            <button class="diag-run-btn" id="diag-run-btn">&#8635; Run Health Check</button>
+        </div>
+    </div>
+</div>
+
 <script src="dashboard.js"></script>
+<script>
+// CDN fallback detection
+(function() {
+    var cdnOk = { chart: false, d3: false };
+    try { cdnOk.chart = typeof Chart !== 'undefined'; } catch(e) {}
+    try { cdnOk.d3 = typeof d3 !== 'undefined'; } catch(e) {}
+    if (!cdnOk.chart || !cdnOk.d3) {
+        var banner = document.getElementById('cdn-fallback-banner');
+        var msg = document.getElementById('cdn-fallback-text');
+        var missing = [];
+        if (!cdnOk.chart) missing.push('Chart.js');
+        if (!cdnOk.d3) missing.push('D3.js');
+        msg.innerHTML = '<strong>CDN Blocked:</strong> ' + missing.join(' & ') +
+            ' failed to load from <code>cdn.jsdelivr.net</code>. Charts and visualizations will not render. ' +
+            'This is typically caused by corporate firewall or proxy blocking external CDN domains. ' +
+            'Contact your network team to whitelist <code>cdn.jsdelivr.net</code>.';
+        banner.style.display = 'flex';
+    }
+})();
+</script>
 </body>
 </html>

@@ -2167,9 +2167,7 @@ def _check_external_connectivity():
         ("AlienVault OTX", f"{OTX_URL}?limit=1", "GET"),
         ("Ransomware.live", RANSOMWARE_LIVE_URL, "GET"),
         ("URLhaus (abuse.ch)", URLHAUS_URL, "GET"),
-        ("CDN: Chart.js", "https://cdn.jsdelivr.net/npm/chart.js@4.4.6/dist/chart.umd.min.js", "GET"),
-        ("CDN: D3.js", "https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js", "GET"),
-        ("Google Fonts", "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap", "GET"),
+
         ("EPSS API", EPSS_API_URL, "GET"),
         ("CVE CIRCL", f"{CVE_CIRCL_URL}/CVE-2024-0001", "GET"),
     ]

@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOC Threat Intelligence Wall-Board</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.6/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+</head>
+<body>
+
+<header id="header">
+    <div class="header-left">
+        <div id="title">SOC THREAT INTELLIGENCE WALL-BOARD</div>
+    </div>
+    <div class="header-right">
+        <div class="data-freshness" id="data-freshness">
+            <span class="freshness-label">DATA</span>
+            <span class="freshness-value" id="freshness-time">--:--</span>
+            <span class="freshness-age" id="freshness-age"></span>
+        </div>
+        <button class="refresh-btn" id="refresh-btn" title="Refresh data now">&#8635;</button>
+        <div class="header-clock-group">
+            <div class="clock-block">
+                <span class="clock-label">UTC</span>
+                <span class="clock-value" id="clock-utc">--:--:--</span>
+            </div>
+            <div class="clock-divider">|</div>
+            <div class="clock-block">
+                <span class="clock-label">GST</span>
+                <span class="clock-value" id="clock-gst">--:--:--</span>
+            </div>
+        </div>
+        <div class="status-badge" id="ingestion-status">
+            <span class="pulse-dot"></span> INGESTION: STARTING
+        </div>
+        <div class="status-badge db-badge" id="db-stats" onclick="window.location.href='/articles.html'" style="cursor:pointer">
+            DB: 0 articles
+        </div>
+    </div>
+</header>
+
+<div class="loading-bar-wrap" id="loading-bar-wrap" style="display:none">
+    <div class="loading-bar" id="loading-bar"></div>
+</div>
+
+<div class="error-banner" id="error-banner" style="display:none">
+    <span class="error-icon">&#9888;</span>
+    <span class="error-text" id="error-text">Connection lost — retrying...</span>
+</div>
+
+<div id="ticker-bar">
+    <div class="ticker-label"><span class="ticker-alert-icon">&#9888;</span> ALERT FEED</div>
+    <div class="ticker-wrap">
+        <div class="ticker-content" id="ticker-content"></div>
+    </div>
+</div>
+
+<nav id="view-nav-bar" aria-label="SOC view navigation">
+    <button class="nav-tab active" data-view="dashboard-grid"><span class="tab-icon">📊</span> Main Wall-Board</button>
+    <button class="nav-tab" data-view="ransomware-view"><span class="tab-icon">🏴‍☠️</span> Ransomware Radar</button>
+    <button class="nav-tab" data-view="apt-view"><span class="tab-icon">🎯</span> APT &amp; Threat Actors</button>
+    <button class="nav-tab" data-view="geo-view"><span class="tab-icon">🗺️</span> Geo Threat Map</button>
+    <button class="nav-tab" data-view="ioc-view"><span class="tab-icon">🔍</span> Actionable IOC Desk</button>
+</nav>
+
+<section id="posture-strip" aria-label="SOC posture summary">
+    <div class="posture-card" id="posture-summary"><span class="posture-label">VULNERABILITY POSTURE</span><span class="posture-value">Loading…</span></div>
+    <div class="posture-card" id="regional-summary"><span class="posture-label">UAE / GCC WATCH</span><span class="posture-value">Loading…</span></div>
+    <div class="posture-card posture-coverage" id="coverage-summary"><span class="posture-label">REPORTED ATT&amp;CK SIGNALS</span><span class="posture-value">Loading…</span></div>
+    <div class="posture-card" id="feed-summary"><span class="posture-label">FEED HEALTH</span><span class="posture-value">Loading…</span></div>
+</section>
+
+<!-- MAIN VIEW: WALL-BOARD GRID -->
+<main id="dashboard-grid" class="soc-view-container">
+    <div class="column left-col">
+        <div class="glass-panel flex-grow-1">
+            <div class="panel-header">
+                <span class="ph-icon accent">&#9881;</span> ATTACK VECTOR MAP
+            </div>
+            <div class="panel-body chart-body">
+                <div class="attack-chart-scroll">
+                    <canvas id="chart-attack-vectors"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="glass-panel flex-grow-2">
+            <div class="panel-header">
+                <span class="ph-icon critical">&#9888;</span> CISA ACTIVELY EXPLOITED (KEV)
+            </div>
+            <div class="panel-body kev-feed" id="kev-feed">
+                <div class="loading-text">Loading KEV data...</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="column center-col">
+        <div class="glass-panel flex-grow-1">
+            <div class="panel-header">
+                <span class="ph-icon accent">&#9672;</span> THREAT KEYWORD CLOUD
+            </div>
+            <div class="panel-body wordcloud-body" id="wordcloud-container">
+                <svg id="wc-svg"></svg>
+            </div>
+        </div>
+        <div class="glass-panel flex-grow-2">
+            <div class="panel-header">
+                <span class="ph-icon accent">&#9783;</span> GLOBAL CYBER NEWS STREAM
+            </div>
+            <div class="panel-body news-feed" id="news-feed">
+                <div class="loading-text">Loading news...</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="column right-col">
+        <div class="glass-panel flex-grow-1">
+            <div class="panel-header">
+                <span class="ph-icon warning">&#9760;</span> TOP PHISHING DOMAINS
+            </div>
+            <div class="panel-body threat-feed" id="phish-domains">
+                <div class="loading-text">Loading phishing data...</div>
+            </div>
+        </div>
+        <div class="glass-panel flex-grow-1">
+            <div class="panel-header">
+                <span class="ph-icon uae">&#9881;</span> OTX THREAT PULSES
+            </div>
+            <div class="panel-body threat-feed" id="otx-pulses">
+                <div class="loading-text">Loading OTX data...</div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- RANSOMWARE RADAR VIEW -->
+<main id="ransomware-view" class="soc-view-container" style="display:none">
+    <div class="column left-col-wide">
+        <div class="glass-panel">
+            <div class="panel-header">
+                <span class="ph-icon critical">🏴‍☠️</span> RANSOMWARE EXTORTION LEAK FEED (Ransomware.live)
+            </div>
+            <div class="panel-body feed-list" id="ransomware-list">
+                <div class="loading-text">Loading ransomware victim data...</div>
+            </div>
+        </div>
+    </div>
+    <div class="column right-col-narrow">
+        <div class="glass-panel flex-grow-1">
+            <div class="panel-header">
+                <span class="ph-icon warning">🏆</span> ACTIVE RANSOMWARE GROUPS
+            </div>
+            <div class="panel-body" id="ransomware-groups">
+                <div class="loading-text">Calculating group activity...</div>
+            </div>
+        </div>
+        <div class="glass-panel flex-grow-1">
+            <div class="panel-header">
+                <span class="ph-icon accent">🏢</span> TARGETED SECTORS
+            </div>
+            <div class="panel-body" id="ransomware-sectors">
+                <div class="loading-text">Calculating sector breakdown...</div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- APT & THREAT ACTOR TRACKER VIEW -->
+<main id="apt-view" class="soc-view-container" style="display:none">
+    <div class="glass-panel full-width">
+        <div class="panel-header">
+            <span class="ph-icon critical">🎯</span> ADVANCED PERSISTENT THREAT (APT) &amp; ADVERSARY RADAR
+        </div>
+        <div class="panel-body">
+            <div class="apt-grid" id="apt-grid">
+                <div class="loading-text">Loading threat actor intelligence...</div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- GEO THREAT MAP VIEW -->
+<main id="geo-view" class="soc-view-container" style="display:none">
+    <div class="glass-panel full-width">
+        <div class="panel-header">
+            <span class="ph-icon accent">🗺️</span> GLOBAL SECURITY EVENT GEO DISTRIBUTION
+        </div>
+        <div class="panel-body geo-container">
+            <div class="geo-left">
+                <div id="geo-map-svg-wrap">
+                    <svg id="geo-world-svg"></svg>
+                </div>
+            </div>
+            <div class="geo-right">
+                <div class="sub-panel-title">TOP TARGETED / HOSTING COUNTRIES</div>
+                <div class="geo-country-list" id="geo-country-list">
+                    <div class="loading-text">Loading geographic data...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- ACTIONABLE IOC DESK VIEW -->
+<main id="ioc-view" class="soc-view-container" style="display:none">
+    <div class="glass-panel full-width">
+        <div class="panel-header header-with-actions">
+            <div><span class="ph-icon accent">🔍</span> ACTIONABLE THREAT IOC QUEUE (ThreatFox &amp; PhishStats)</div>
+            <div class="action-btn-group">
+                <a href="/api/export-iocs?format=csv" class="btn-export" download="soc_iocs_export.csv">📥 Export CSV (SIEM)</a>
+                <a href="/api/export-iocs?format=json" class="btn-export" target="_blank">📄 Export JSON</a>
+            </div>
+        </div>
+        <div class="panel-body">
+            <div class="ioc-table-controls">
+                <input type="text" id="ioc-search-input" placeholder="Search IP, Domain, Hash, or Malware..." class="ioc-search-box">
+                <select id="ioc-type-filter" class="ioc-select">
+                    <option value="">All IOC Types</option>
+                    <option value="domain">Domains</option>
+                    <option value="ip">IP Addresses</option>
+                    <option value="url">URLs</option>
+                    <option value="hash">Hashes</option>
+                </select>
+            </div>
+            <div class="ioc-table-scroll">
+                <table class="soc-table" id="ioc-desk-table">
+                    <thead>
+                        <tr>
+                            <th>Type</th>
+                            <th>Value / Indicator</th>
+                            <th>Threat / Malware</th>
+                            <th>Country</th>
+                            <th>Source</th>
+                            <th>First Seen</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ioc-table-body">
+                        <tr><td colspan="6" class="loading-text">Loading actionable IOC queue...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script src="dashboard.js"></script>
+</body>
+</html>

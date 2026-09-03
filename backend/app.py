@@ -1,4 +1,9 @@
 import os
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
 import re
 import json
 import time
@@ -21,9 +26,6 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(me
 logger = logging.getLogger(__name__)
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-import sys
-if BASE_DIR not in sys.path:
-    sys.path.insert(0, BASE_DIR)
 FRONTEND_DIR = os.path.join(BASE_DIR, "..", "frontend")
 CACHE_DIR = os.path.join(BASE_DIR, "cache")
 
